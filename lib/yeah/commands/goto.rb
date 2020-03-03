@@ -49,8 +49,8 @@ module Yeah
 
       def goto(key)
         if data[key]
-          return if CLI::Kit::System.system('cd', data[key])
-          puts CLI::UI.fmt("{{x}} {{red:Error}}\nUnable to change to directory: #{data[key]}.")
+          return Yeah::Kernel.cd(data[key]) if File.exist?(data[key])
+          puts CLI::UI.fmt("{{x}} {{red:Error}}\nNo such file or directory: #{data[key]}.")
         else
           puts CLI::UI.fmt("{{x}} {{red:Error}}\nCommand: #{key} hasn't been set yet.")
         end

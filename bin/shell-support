@@ -1,0 +1,62 @@
+#!/usr/bin/ruby --disable-gems
+
+module ShellSupportCLI
+  ROOT = File.expand_path('../..', __FILE__)
+
+  class << self
+    def call(*argv)
+      case argv.shift
+      when 'env'
+        usage_and_die unless (shellname = argv.shift)
+        env(shellname)
+      else
+        usage_and_die
+      end
+    end
+
+    private
+
+    # write out (to STDOUT) a list of instructions using a simple API implemented in each shell shim
+    def env(_shellname)
+      EnvHelpers.setenv('USING_YEAH', '1')
+
+      # Use Mac's default Android SDK location.
+      unless ENV.key?('NVM_DIR')
+        EnvHelpers.setenv('NVM_DIR', File.expand_path('~/.nvm'))
+      end
+
+      EnvHelpers.prepend_path("#{ROOT}/bin/user")
+    end
+
+    def usage_and_die
+      abort("usage: #{$PROGRAM_NAME} env <shellname>")
+    end
+  end
+
+  module EnvHelpers
+    class << self
+      def setenv(k, v)
+        puts %(yeah__setenv "#{k}" "#{v}")
+      end
+
+      def source(rel_path)
+        abs_path = File.expand_path(rel_path, ROOT)
+        puts %(yeah__source "#{abs_path}")
+      end
+
+      def append_path(path)
+        puts %(yeah__append_path "#{path}") unless ENV['PATH'].include?(path)
+      end
+
+      def prepend_path(path)
+        puts %(yeah__prepend_path "#{path}")
+      end
+
+      def lazyload(cmd, script)
+        puts %(yeah__lazyload "#{cmd}" "#{script}")
+      end
+    end
+  end
+end
+
+ShellSupportCLI.call(*ARGV) if $PROGRAM_NAME == __FILE__

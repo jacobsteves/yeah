@@ -11,6 +11,7 @@ module Yeah
   LOG_FILE  = '/tmp/yeah.log'
 
   autoload(:EntryPoint, 'yeah/entry_point')
+  autoload(:Kernel,     'yeah/kernel')
   autoload(:Options,    'yeah/options')
   autoload(:Command,    'yeah/command')
   autoload(:Commands,   'yeah/commands')
