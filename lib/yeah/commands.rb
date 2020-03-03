@@ -13,6 +13,7 @@ module Yeah
     end
 
     register :Example, 'example', 'yeah/commands/example'
+    register :Goto,    'goto',    'yeah/commands/goto'
     register :Help,    'help',    'yeah/commands/help'
   end
 end

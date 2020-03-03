@@ -11,10 +11,11 @@ module Yeah
   LOG_FILE  = '/tmp/yeah.log'
 
   autoload(:EntryPoint, 'yeah/entry_point')
+  autoload(:Options,    'yeah/options')
+  autoload(:Command,    'yeah/command')
   autoload(:Commands,   'yeah/commands')
 
   autocall(:Config)  { CLI::Kit::Config.new(tool_name: TOOL_NAME) }
-  autocall(:Command) { CLI::Kit::BaseCommand }
 
   autocall(:Executor) { CLI::Kit::Executor.new(log_file: LOG_FILE) }
   autocall(:Resolver) do
