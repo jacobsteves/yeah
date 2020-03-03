@@ -27,6 +27,12 @@ module Yeah
       puts CLI::UI.fmt("#{text}")
     end
 
+    def warning(text)
+      puts CLI::UI.fmt("{{warning:Warning}}")
+      puts CLI::UI.fmt("#{text}")
+      puts "\n"
+    end
+
     def call(_args, _command_name)
       raise NotImplementedError
     end

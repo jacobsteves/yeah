@@ -40,11 +40,16 @@ module Yeah
 
       def data
         @data ||= if File.exist?(serialized_store_path)
-                  content = File.read(serialized_store_path)
-                  content ? JSON.parse(content) : {}
-                else
-                  {}
-                end
+                    begin
+                      content = File.read(serialized_store_path)
+                      content ? JSON.parse(content) : {}
+                    rescue JSON::ParserError
+                      warning("Your saved data has been corrupted and could not be retrieved.")
+                      {}
+                      end
+                  else
+                    {}
+                  end
       end
 
       def goto(key)
