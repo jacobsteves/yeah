@@ -10,12 +10,21 @@ module Yeah
       cmd.options.parse(@_options, args)
       cmd.call(args, command_name)
     rescue OptionParser::MissingArgument, ArgumentError
-      puts CLI::UI.fmt("{{x}} {{red:Missing argument.}}")
-      puts CLI::UI.fmt(help)
+      cmd.output("{{x}} {{red:Missing argument.}}")
+      cmd.output(help)
     end
 
     def self.options(&block)
       @_options = block
+    end
+
+    def output(text)
+      puts CLI::UI.fmt(text)
+    end
+
+    def error(text)
+      puts CLI::UI.fmt("{{x}} {{red:Error}}")
+      puts CLI::UI.fmt("#{text}")
     end
 
     def call(_args, _command_name)

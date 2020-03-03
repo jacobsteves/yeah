@@ -50,9 +50,9 @@ module Yeah
       def goto(key)
         if data[key]
           return Yeah::Kernel.cd(data[key]) if File.exist?(data[key])
-          puts CLI::UI.fmt("{{x}} {{red:Error}}\nNo such file or directory: #{data[key]}.")
+          error("No such file or directory: #{data[key]}.")
         else
-          puts CLI::UI.fmt("{{x}} {{red:Error}}\nCommand: #{key} hasn't been set yet.")
+          error("Command: #{key} hasn't been set yet.")
         end
       end
 
@@ -66,7 +66,7 @@ module Yeah
       def set_key(key, value)
         data[key] = value
         write_data
-        puts CLI::UI.fmt("{{v}} Key successfully set.")
+        output("{{v}} Key successfully set.")
       end
 
       def delete_key(key)
@@ -74,13 +74,19 @@ module Yeah
         data.delete(key)
         data = data || {}
         write_data
-        puts CLI::UI.fmt("Key {{cyan:#{key}}} with value {{cyan:#{value}}} was deleted.")
+        output("Key {{cyan:#{key}}} with value {{cyan:#{value}}} was deleted.")
       end
 
       def list
-        puts CLI::UI.fmt("Listing saved locations.")
+        if data.empty?
+          output("No locations saved yet.")
+          output(self.class.help)
+          return
+        end
+
+        output("Listing saved locations.")
         data.each do |key, value|
-          puts CLI::UI.fmt("{{cyan:#{key}}}: #{value}")
+          output("{{cyan:#{key}}}: #{value}")
         end
       end
     end
