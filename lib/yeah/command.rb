@@ -10,7 +10,12 @@ module Yeah
       cmd.options.parse(@_options, args)
       cmd.call(args, command_name)
     rescue OptionParser::MissingArgument, ArgumentError
-      cmd.output("{{x}} {{red:Missing argument.}}")
+      cmd.error("Missing argument.")
+      cmd.output('')
+      cmd.output(help)
+    rescue OptionParser::InvalidOption
+      cmd.error("Invalid option.")
+      cmd.output('')
       cmd.output(help)
     end
 

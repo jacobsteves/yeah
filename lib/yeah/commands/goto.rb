@@ -26,8 +26,12 @@ module Yeah
       end
 
       def self.help
-        "Goto your saved directories.\n"\
-        "Usage: {{command:#{Yeah::TOOL_NAME} goto <name> [--set=dir] [--delete] [--list]}}"
+        "Goto the directory associated with <key>.\n"\
+        "Usage: {{command:#{Yeah::TOOL_NAME} goto <key> [--set <dir>] [--delete] [--list]}}\n\n"\
+        "  Options:\n"\
+        "    {{command:--set <dir>}}, {{command: -s <dir>}}    - Save entry <key> with value <dir>\n"\
+        "    {{command:--delete}},  {{command: -d}}        - Delete entry <key>\n"\
+        "    {{command:--list}},    {{command: -l}}        - List all saved entries <name>"
       end
 
       private
