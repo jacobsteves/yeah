@@ -31,7 +31,7 @@ module Yeah
         "  Options:\n"\
         "    {{command:--set <dir>}}, {{command: -s <dir>}}    - Save entry <key> with value <dir>\n"\
         "    {{command:--delete}},    {{command: -d}}          - Delete entry <key>\n"\
-        "    {{command:--list}},      {{command: -l}}          - List all saved entries <name>"
+        "    {{command:--list}},      {{command: -l}}          - List all saved entries"
       end
 
       private
