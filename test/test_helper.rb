@@ -23,4 +23,7 @@ CLI::UI::StdoutRouter.enable
 require 'byebug'
 require 'minitest/autorun'
 require 'minitest/unit'
+require 'minitest/reporters'
 require 'mocha/minitest'
+
+require 'yeah'
