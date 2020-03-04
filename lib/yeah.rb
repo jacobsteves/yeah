@@ -10,6 +10,12 @@ module Yeah
   ROOT      = File.expand_path('../..', __FILE__)
   LOG_FILE  = '/tmp/yeah.log'
 
+  GenericAbort = CLI::Kit::GenericAbort
+  Abort        = CLI::Kit::Abort
+  Bug          = CLI::Kit::Bug
+  BugSilent    = CLI::Kit::BugSilent
+  AbortSilent  = CLI::Kit::AbortSilent
+
   autoload(:EntryPoint, 'yeah/entry_point')
   autoload(:Kernel,     'yeah/kernel')
   autoload(:Options,    'yeah/options')
