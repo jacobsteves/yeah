@@ -30,8 +30,8 @@ module Yeah
         "Usage: {{command:#{Yeah::TOOL_NAME} goto <key> [--set <dir>] [--delete] [--list]}}\n\n"\
         "  Options:\n"\
         "    {{command:--set <dir>}}, {{command: -s <dir>}}    - Save entry <key> with value <dir>\n"\
-        "    {{command:--delete}},  {{command: -d}}        - Delete entry <key>\n"\
-        "    {{command:--list}},    {{command: -l}}        - List all saved entries <name>"
+        "    {{command:--delete}},    {{command: -d}}          - Delete entry <key>\n"\
+        "    {{command:--list}},      {{command: -l}}          - List all saved entries <name>"
       end
 
       private

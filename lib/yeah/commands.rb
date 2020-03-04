@@ -12,7 +12,6 @@ module Yeah
       Registry.add(->() { const_get(const) }, cmd)
     end
 
-    register :Example, 'example', 'yeah/commands/example'
     register :Goto,    'goto',    'yeah/commands/goto'
     register :Help,    'help',    'yeah/commands/help'
   end
