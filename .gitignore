@@ -7,7 +7,7 @@
 
 # Yeah files
 yeah.yml
-store/
+.store/
 
 # Misc
 .byebug_history

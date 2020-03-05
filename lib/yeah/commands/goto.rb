@@ -13,7 +13,7 @@ module Yeah
       def call(args, _name)
         return list if options.flags[:list]
 
-        name = args.first
+        name = args.first&.to_sym
         raise ArgumentError unless name
 
         if options.flags[:delete]
@@ -36,67 +36,42 @@ module Yeah
 
       private
 
-      attr_accessor :data
-
-      def serialized_store_path
-        File.expand_path('goto', super)
-      end
-
-      def data
-        @data ||= if File.exist?(serialized_store_path)
-                    begin
-                      content = File.read(serialized_store_path)
-                      content ? JSON.parse(content) : {}
-                    rescue JSON::ParserError
-                      warning("Your saved data has been corrupted and could not be retrieved.")
-                      {}
-                      end
-                  else
-                    {}
-                  end
-      end
-
       def goto(key)
-        if data[key]
-          return Yeah::Kernel.cd(data[key]) if File.exist?(data[key])
-          error("No such file or directory: #{data[key]}.")
+        if store.exists?(key)
+          path = store.get(key)
+          return Yeah::Kernel.cd(path) if File.exist?(path)
+          error("No such file or directory: #{path}.")
         else
           error("Command: #{key} hasn't been set yet.")
         end
       end
 
-      def write_data
-        content = JSON.pretty_generate(data)
-        File.open(serialized_store_path, 'w') do |f|
-          f.write(content)
-        end
-      end
-
       def set_key(key, value)
-        data[key] = value
-        write_data
+        store.set("#{key}": value)
         output("{{v}} Key successfully set.")
       end
 
       def delete_key(key)
-        value = data[key]
-        data.delete(key)
-        data = data || {}
-        write_data
+        value = store.get(key)
+        store.delete(key)
         output("Key {{cyan:#{key}}} with value {{cyan:#{value}}} was deleted.")
       end
 
       def list
-        if data.empty?
+        if store.empty?
           output("No locations saved yet.")
           output(self.class.help)
           return
         end
 
         output("Listing saved locations.")
-        data.each do |key, value|
+        store.each do |key, value|
           output("{{cyan:#{key}}}: #{value}")
         end
+      end
+
+      def store
+        @store ||= Yeah::Store.new(filename: 'goto')
       end
     end
   end

@@ -1,13 +1,23 @@
 require 'test_helper'
 
 describe Yeah::Commands::Goto do
+  include TestHelpers::FakeFS
+
   let(:args) { ['name'] }
   let(:cmd) { Yeah::Commands::Goto }
-  let(:data) { { } }
+
+  let(:filename) { 'filename' }
+  let(:store) do
+    FileUtils.mkdir_p(Yeah::STORE_DIR)
+    Yeah::Store.new(filename: filename)
+  end
+
+  before do
+    cmd.any_instance.stubs(:store).returns(store)
+  end
 
   describe ".call" do
     subject do
-      cmd.any_instance.stubs(:data).returns(data)
       cmd.call(args, 'goto')
     end
 
@@ -32,12 +42,13 @@ describe Yeah::Commands::Goto do
       describe "when data has been stored" do
         let(:data) {
           {
-            "some_key" => "/some/route",
-            "some_key2" => "/another/route"
+            "some_key": "/some/route",
+            "some_key2": "/another/route"
           }
         }
 
         it "should display the data" do
+          store.set(data)
           io = capture_io { subject }
           output = io.join
           expected_output = CLI::UI.fmt("{{cyan:some_key}}: /some/route\n{{cyan:some_key2}}: /another/route")

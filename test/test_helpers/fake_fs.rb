@@ -6,6 +6,7 @@ module TestHelpers
       super
       ::FakeFS.clear!
       ::FakeFS.activate!
+      ::FakeFS::File.any_instance.stubs(:flock).returns(true)
     end
 
     def teardown

@@ -45,9 +45,5 @@ module Yeah
     def has_subcommands?
       false
     end
-
-    def serialized_store_path
-      File.expand_path('../../store', File.dirname(__FILE__))
-    end
   end
 end

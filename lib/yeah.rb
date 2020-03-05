@@ -9,6 +9,7 @@ module Yeah
   TOOL_NAME = 'yeah'
   ROOT      = File.expand_path('../..', __FILE__)
   LOG_FILE  = '/tmp/yeah.log'
+  STORE_DIR = File.join(ROOT, '.store')
 
   Abort        = CLI::Kit::Abort
   AbortSilent  = CLI::Kit::AbortSilent
@@ -22,6 +23,7 @@ module Yeah
   autoload(:Kernel,     'yeah/kernel')
   autoload(:Options,    'yeah/options')
   autoload(:Project,    'yeah/project')
+  autoload(:Store,      'yeah/store')
 
   autocall(:Config)  { CLI::Kit::Config.new(tool_name: TOOL_NAME) }
 
