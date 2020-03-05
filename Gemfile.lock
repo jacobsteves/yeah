@@ -5,6 +5,7 @@ GEM
     ast (2.4.0)
     builder (3.2.4)
     byebug (11.1.1)
+    fakefs (0.20.1)
     jaro_winkler (1.5.4)
     method_source (0.9.2)
     minitest (5.14.0)
@@ -35,6 +36,7 @@ PLATFORMS
 
 DEPENDENCIES
   byebug
+  fakefs (~> 0.20.1)
   method_source
   minitest (>= 5.0.0)
   minitest-reporters

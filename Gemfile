@@ -12,4 +12,5 @@ group :test do
   gem 'minitest', '>= 5.0.0', require: false
   gem 'minitest-reporters', require: false
   gem 'mocha', '~> 1.11.2', require: false
+  gem 'fakefs', '~> 0.20.1', require: false
 end

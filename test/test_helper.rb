@@ -26,4 +26,6 @@ require 'minitest/unit'
 require 'minitest/reporters'
 require 'mocha/minitest'
 
+require_relative 'test_helpers'
+
 require 'yeah'
