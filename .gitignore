@@ -1,8 +1,13 @@
+# JetBrains
 .idea/
 
+# Mac OS
 .DS_Store
 **/.DS_Store
 
-.byebug_history
-
+# Yeah files
+yeah.yml
 store/
+
+# Misc
+.byebug_history
