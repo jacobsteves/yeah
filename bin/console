@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative "support/load_project"
+require "irb"
+require "irb/completion"
+require 'irb/ext/save-history'
+
+IRB.start

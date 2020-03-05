@@ -1,4 +1,5 @@
 $LOAD_PATH.unshift(File.expand_path('../lib', __FILE__))
+require_relative 'bin/support/load_project'
 require 'rake/testtask'
 require 'rubocop/rake_task'
 
@@ -16,3 +17,7 @@ RuboCop::RakeTask.new(:style) do |t|
 end
 
 task(default: [:test, :style])
+
+task :console do
+  exec('irb', '-r', './bin/support/load_project.rb', '-r', 'byebug')
+end
