@@ -12,9 +12,11 @@ module Yeah
     rescue OptionParser::MissingArgument, ArgumentError
       Output.error("Missing argument.", newline: true)
       cmd.call_help(args, command_name)
+      raise AbortSilent
     rescue OptionParser::InvalidOption
       Output.error("Invalid option.", newline: true)
       cmd.call_help(args, command_name)
+      raise AbortSilent
     end
 
     def self.options(&block)

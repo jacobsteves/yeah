@@ -106,8 +106,10 @@ describe Yeah::Commands::Goto do
         let(:args) { ['name', '--set']}
 
         it "should display argument error" do
-          io = capture_io { subject }
-          assert_match('Missing argument.', io.join)
+          assert_raises(Yeah::AbortSilent) do
+            io = capture_io { subject }
+            assert_match('Missing argument.', io.join)
+          end
         end
       end
     end
@@ -126,8 +128,10 @@ describe Yeah::Commands::Goto do
         let(:args) { ['--delete']}
 
         it "should display argument error" do
-          io = capture_io { subject }
-          assert_match('Missing argument.', io.join)
+          assert_raises(Yeah::AbortSilent) do
+            io = capture_io { subject }
+            assert_match('Missing argument.', io.join)
+          end
         end
       end
     end
