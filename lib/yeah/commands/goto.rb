@@ -19,7 +19,7 @@ module Yeah
         raise ArgumentError unless name
 
         if options.flags[:delete]
-          delete_key(name)
+          delete(name)
         elsif options.flags[:set]
           set(name, options.flags[:set])
         else
@@ -72,7 +72,7 @@ module Yeah
         Output.print("{{v}} Key successfully set.")
       end
 
-      def delete_key(key)
+      def delete(key)
         value = store.get(key)
         store.delete(key)
         Output.print("Key {{cyan:#{key}}} with value {{cyan:#{value}}} was deleted.")
