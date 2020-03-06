@@ -12,11 +12,11 @@ module Yeah
     rescue OptionParser::MissingArgument, ArgumentError
       cmd.error("Missing argument.")
       cmd.output('')
-      cmd.output(help)
+      cmd.call_help(args, command_name)
     rescue OptionParser::InvalidOption
       cmd.error("Invalid option.")
       cmd.output('')
-      cmd.output(help)
+      cmd.call_help(args, command_name)
     end
 
     def self.options(&block)
@@ -40,6 +40,11 @@ module Yeah
 
     def call(_args, _command_name)
       raise NotImplementedError
+    end
+
+    def call_help(args, command_name)
+      help = Commands::Help.new
+      help.call(args, command_name)
     end
 
     def has_subcommands?
