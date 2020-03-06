@@ -8,10 +8,12 @@ module Yeah
         parser.on('--set=dir') { |flag| flags[:set] = flag }
         parser.on('--delete') { |flag| flags[:delete] = flag }
         parser.on('--list') { |flag| flags[:list] = flag }
+        parser.on('--clear') { |flag| flags[:clear] = flag }
       end
 
       def call(args, _name)
         return list if options.flags[:list]
+        return clear if options.flags[:clear]
 
         name = args.first&.to_sym
         raise ArgumentError unless name
@@ -27,9 +29,10 @@ module Yeah
 
       def self.help
         "Goto the directory associated with <key>.\n"\
-        "Usage: {{command:#{Yeah::TOOL_NAME} goto <key> [--set <dir>] [--delete] [--list]}}\n\n"\
+        "Usage: {{command:#{Yeah::TOOL_NAME} goto <key> [--set <dir>] [--clear] [--delete] [--list]}}\n\n"\
         "  Options:\n"\
         "    {{command:--set <dir>}}, {{command: -s <dir>}}    - Save entry <key> with value <dir>\n"\
+        "    {{command:--clear}},     {{command: -c}}          - Delete all saved entries\n"\
         "    {{command:--delete}},    {{command: -d}}          - Delete entry <key>\n"\
         "    {{command:--list}},      {{command: -l}}          - List all saved entries"
       end
@@ -43,6 +46,24 @@ module Yeah
           error("No such file or directory: #{path}.")
         else
           error("Command: #{key} hasn't been set yet.")
+        end
+      end
+
+      def clear
+        ans = CLI::UI.ask('Delete all stored goto data?', options: %w(yes no))
+        return output('Canceled.') if ans == 'no'
+
+        CLI::UI::Spinner.spin('Deleting..') do |spinner|
+          sleep 0.7
+          spinner.update_title('Ahh let me double check..')
+        end
+
+        ans = CLI::UI.ask('Are you super sure?', options: ['I promise, clear all data', 'cancel'])
+        return output('Canceled.') if ans == 'cancel'
+
+        CLI::UI::Spinner.spin('Deleting for real..') do |spinner|
+          store.clear
+          spinner.update_title('Deleted.')
         end
       end
 

@@ -56,5 +56,40 @@ describe Yeah::Commands::Goto do
         end
       end
     end
+
+    describe "when clear flag is set" do
+      let(:args) { ['name', '--clear']}
+
+      describe "when user continues on prompt 1" do
+        describe "when user continues on prompt 2" do
+          it 'should cancel' do
+            CLI::UI.stubs(:ask).returns('yes').then.returns('I promise, clear all data')
+            store.expects(:clear).once
+            io = capture_io do
+              CLI::UI::StdoutRouter.ensure_activated
+              subject
+            end
+            assert_match('Deleted.', io.join)
+          end
+        end
+        describe "when user cancels on prompt 2" do
+          it 'should cancel' do
+            CLI::UI.stubs(:ask).returns('no').then.returns('cancel')
+            store.expects(:clear).never
+            io = capture_io { subject }
+            assert_match('Canceled.', io.join)
+          end
+        end
+      end
+
+      describe "when user cancels on prompt 1" do
+        it 'should cancel' do
+          CLI::UI.stubs(:ask).returns('no').once
+          store.expects(:clear).never
+          io = capture_io { subject }
+          assert_match('Canceled.', io.join)
+        end
+      end
+    end
   end
 end
