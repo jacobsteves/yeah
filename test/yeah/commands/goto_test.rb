@@ -91,5 +91,25 @@ describe Yeah::Commands::Goto do
         end
       end
     end
+
+    describe "when set flag is set" do
+      describe "when a value is given" do
+        let(:args) { ['name', '--set', 'value']}
+
+        it "should save the value" do
+          store.expects(:set).with('name': 'value')
+          capture_io { subject }
+        end
+      end
+
+      describe "when a value is not given" do
+        let(:args) { ['name', '--set']}
+
+        it "should display argument error" do
+          io = capture_io { subject }
+          assert_match('Missing argument.', io.join)
+        end
+      end
+    end
   end
 end

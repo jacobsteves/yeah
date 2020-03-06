@@ -21,7 +21,7 @@ module Yeah
         if options.flags[:delete]
           delete_key(name)
         elsif options.flags[:set]
-          set_key(name, options.flags[:set])
+          set(name, options.flags[:set])
         else
           goto(name)
         end
@@ -67,7 +67,7 @@ module Yeah
         end
       end
 
-      def set_key(key, value)
+      def set(key, value)
         store.set("#{key}": value)
         Output.print("{{v}} Key successfully set.")
       end
