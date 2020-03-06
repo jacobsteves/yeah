@@ -4,16 +4,15 @@ module Yeah
   module Commands
     class Help < Yeah::Command
       def call(args, _name)
-        puts CLI::UI.fmt("{{bold:Available commands}}")
-        puts ""
+        Output.print("{{bold:Available commands}}", newline: true)
 
         Yeah::Commands::Registry.resolved_commands.each do |name, klass|
           next if name == 'help'
-          puts CLI::UI.fmt("{{command:#{Yeah::TOOL_NAME} #{name}}}")
+          Output.print("{{command:#{Yeah::TOOL_NAME} #{name}}}")
           if help = klass.help
-            puts CLI::UI.fmt(help)
+            Output.print(help)
           end
-          puts ""
+          Output.newline
         end
       end
     end

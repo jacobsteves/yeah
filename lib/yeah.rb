@@ -22,6 +22,7 @@ module Yeah
   autoload(:EntryPoint, 'yeah/entry_point')
   autoload(:Kernel,     'yeah/kernel')
   autoload(:Options,    'yeah/options')
+  autoload(:Output,     'yeah/output')
   autoload(:Project,    'yeah/project')
   autoload(:Store,      'yeah/store')
 
