@@ -24,18 +24,27 @@ module Yeah
       # Finalize all requests to change a user's shell environment
       #
       def finish!
-        message = []
+        commands = []
+        requests = []
 
-        message << "cd:#{@cd}" if @cd
-        (@setenv || {}).each do |k, v|
-          message << "setenv:#{k}=#{v}"
+        if @cd
+          requests << "cd:#{@cd}"
+          commands << "cd #{@cd}"
         end
 
-        return if message.empty?
+        (@setenv || {}).each do |k, v|
+          requests << "setenv:#{k}=#{v}"
+        end
+
+        return if requests.empty?
         begin
-          finalizer_pipe.puts(message.join("\n"))
+          finalizer_pipe.puts(requests.join("\n"))
         rescue Errno::EBADF, IOError
-          $stderr.puts "Not running with shell integration. Run: #{message.join("\n")}"
+          finalizers = []
+          commands.each { |cmd| finalizers << "{{command:#{cmd}" }
+          $stderr.puts CLI::UI.fmt('{{x}} {{red:Error}}')
+          $stderr.puts CLI::UI.fmt('Not running with shell integration.')
+          $stderr.puts CLI::UI.fmt("Run: #{finalizers.join("\n")}") if commands.any?
         ensure
           clear
         end
