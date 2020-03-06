@@ -34,8 +34,7 @@ describe Yeah::Commands::Goto do
           cmd.expects(:help).returns('').once
           io = capture_io { subject }
           output = io.join
-          expected_output = CLI::UI.fmt("No locations saved yet.")
-          assert_match(expected_output, output)
+          assert_match("No locations saved yet.", output)
         end
       end
 
@@ -65,19 +64,17 @@ describe Yeah::Commands::Goto do
           it 'should cancel' do
             CLI::UI.stubs(:ask).returns('yes').then.returns('I promise, clear all data')
             store.expects(:clear).once
-            io = capture_io do
+            capture_io do
               CLI::UI::StdoutRouter.ensure_activated
               subject
             end
-            assert_match('Deleted.', io.join)
           end
         end
         describe "when user cancels on prompt 2" do
           it 'should cancel' do
             CLI::UI.stubs(:ask).returns('no').then.returns('cancel')
             store.expects(:clear).never
-            io = capture_io { subject }
-            assert_match('Canceled.', io.join)
+            capture_io { subject }
           end
         end
       end
@@ -86,8 +83,7 @@ describe Yeah::Commands::Goto do
         it 'should cancel' do
           CLI::UI.stubs(:ask).returns('no').once
           store.expects(:clear).never
-          io = capture_io { subject }
-          assert_match('Canceled.', io.join)
+          capture_io { subject }
         end
       end
     end
