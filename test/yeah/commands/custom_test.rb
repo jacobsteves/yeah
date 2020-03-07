@@ -7,12 +7,6 @@ describe Yeah::Commands::Custom do
   let(:cmd) { Yeah::Commands::Custom }
   let(:cmd_instance) { cmd.new }
 
-  describe '.call' do
-    subject do
-      cmd.call(args, cmd_name)
-    end
-  end
-
   describe '.valid_command' do
     let(:command) { nil }
     subject do
@@ -61,8 +55,8 @@ describe Yeah::Commands::Custom do
         }
       end
       it 'should execute them all' do
-        cmd_instance.expects(:execute).with('a')
-        cmd_instance.expects(:execute).with('b')
+        cmd_instance.expects(:execute).with('a', [])
+        cmd_instance.expects(:execute).with('b', [])
         subject
       end
     end
@@ -74,7 +68,24 @@ describe Yeah::Commands::Custom do
         }
       end
       it 'should execute it' do
-        cmd_instance.expects(:execute).with('a')
+        cmd_instance.expects(:execute).with('a', [])
+        subject
+      end
+    end
+
+    describe 'when run with args' do
+      let(:args) { ['-a', '-l'] }
+      let(:definition) do
+        {
+          'run' => 'a'
+        }
+      end
+      subject do
+        cmd_instance.send(:run, definition, args)
+      end
+
+      it 'should execute it' do
+        cmd_instance.expects(:execute).with('a', args)
         subject
       end
     end

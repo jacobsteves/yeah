@@ -4,6 +4,8 @@ require 'json'
 module Yeah
   module Commands
     class Goto < Yeah::Command
+      parses_options
+
       options do |parser, flags|
         parser.on('--set=dir') { |flag| flags[:set] = flag }
         parser.on('--delete') { |flag| flags[:delete] = flag }

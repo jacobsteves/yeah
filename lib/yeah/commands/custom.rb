@@ -6,7 +6,7 @@ module Yeah
       def call(args, command_name)
         self.command_name = command_name
         cmd = command(command_name)
-        run(cmd)
+        run(cmd, args)
       end
 
       private
@@ -37,15 +37,15 @@ module Yeah
         cmd['run'].is_a?(Array) || cmd['run'].is_a?(String)
       end
 
-      def run(definition)
+      def run(definition, args = [])
         to_perform = definition['run']
-        return execute(to_perform) unless to_perform.is_a?(Array)
-        to_perform.each { |cmd| execute(cmd) }
+        return execute(to_perform, args) unless to_perform.is_a?(Array)
+        to_perform.each { |cmd| execute(cmd, args) }
       end
 
-      def execute(cmd)
+      def execute(cmd, args = [])
         raise_config_error unless cmd.is_a?(String)
-        exec(cmd)
+        exec(cmd, *args)
       end
     end
   end
