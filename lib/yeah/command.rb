@@ -1,4 +1,5 @@
 require 'cli/kit'
+require 'optparse'
 
 module Yeah
   class Command < CLI::Kit::BaseCommand
@@ -6,8 +7,7 @@ module Yeah
 
     def self.call(args, command_name)
       cmd = new
-      cmd.options = Options.new
-      cmd.options.parse(@_options, args)
+      cmd.configure_options(@_options, args) if parses_options?
       cmd.call(args, command_name)
     rescue OptionParser::MissingArgument, ArgumentError
       cmd.abort_with_help(args, command_name, message: "Missing argument.")
@@ -19,6 +19,19 @@ module Yeah
 
     def self.options(&block)
       @_options = block
+    end
+
+    def self.parses_options?
+      @_parses_options
+    end
+
+    def self.parses_options
+      @_parses_options = true
+    end
+
+    def configure_options(options, args)
+      self.options = Options.new
+      self.options.parse(options, args)
     end
 
     def call(_args, _command_name)
