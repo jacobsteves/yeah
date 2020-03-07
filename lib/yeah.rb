@@ -17,6 +17,8 @@ module Yeah
   BugSilent    = CLI::Kit::BugSilent
   GenericAbort = CLI::Kit::GenericAbort
 
+  ConfigurationError = Class.new(Exception)
+
   autoload(:Command,    'yeah/command')
   autoload(:Commands,   'yeah/commands')
   autoload(:EntryPoint, 'yeah/entry_point')

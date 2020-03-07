@@ -10,9 +10,11 @@ module Yeah
       cmd.options.parse(@_options, args)
       cmd.call(args, command_name)
     rescue OptionParser::MissingArgument, ArgumentError
-      cmd.fail_with_help(args, command_name, "Missing argument.")
+      cmd.abort_with_help(args, command_name, message: "Missing argument.")
     rescue OptionParser::InvalidOption
-      cmd.fail_with_help(args, command_name, "Invalid option.")
+      cmd.abort_with_help(args, command_name, message: "Invalid option.")
+    rescue ConfigurationError => e
+      cmd.abort(message: e.message)
     end
 
     def self.options(&block)
@@ -28,9 +30,15 @@ module Yeah
       help.call(args, command_name)
     end
 
-    def fail_with_help(args, command_name, message = nil)
-      Output.error(message, newline: true) if message
-      call_help(args, command_name)
+    def abort_with_help(args, command_name, message: nil)
+      abort(message: message) do
+        call_help(args, command_name)
+      end
+    end
+
+    def abort(message: nil)
+      Output.error(message, newline: block_given?) if message
+      yield if block_given?
       raise AbortSilent
     end
 

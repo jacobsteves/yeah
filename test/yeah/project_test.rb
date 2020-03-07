@@ -37,12 +37,20 @@ describe Yeah::Project do
   describe '.config' do
     let(:project_instance) { Yeah::Project.new(directory: directory) }
 
-    it 'should load and cache the config' do
+    it 'should load and cache the config with symbols' do
       FileUtils.mkdir_p(directory)
       File.write(path, ':some: yml')
       assert_equal({ some: 'yml' }, project_instance.config)
       File.delete(path)
       assert_equal({ some: 'yml' }, project_instance.config)
+    end
+
+    it 'should load and cache the config with strings' do
+      FileUtils.mkdir_p(directory)
+      File.write(path, 'some: yml')
+      assert_equal({ 'some' => 'yml' }, project_instance.config)
+      File.delete(path)
+      assert_equal({ 'some' => 'yml' }, project_instance.config)
     end
 
     it 'should raise error when yeah.yml doesnt exist' do
@@ -52,6 +60,24 @@ describe Yeah::Project do
     it 'should raise error when yaml is not a hash' do
       project_instance.stubs(:load_yaml_file).returns('')
       assert_raises(Yeah::Abort) { project_instance.config }
+    end
+  end
+
+  describe '.custom_command_names' do
+    describe 'when there are no commands in the config' do
+      it 'should return an empty array' do
+        project_instance.stubs(:config).returns({})
+        assert_equal([], project_instance.custom_command_names)
+      end
+    end
+
+    describe 'when there are custom commands in the config' do
+      it 'should pull the keys from the config' do
+        project_instance.stubs(:config).returns({
+          'commands' => { a: 'a', b: 'b' }
+        })
+        assert_equal([:a, :b], project_instance.custom_command_names)
+      end
     end
   end
 

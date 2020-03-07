@@ -44,6 +44,10 @@ module Yeah
       end
     end
 
+    def custom_command_names
+      config['commands']&.keys || []
+    end
+
     private
 
     def load_yaml_file(relative_path)
