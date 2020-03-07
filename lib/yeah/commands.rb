@@ -7,12 +7,15 @@ module Yeah
       contextual_resolver: nil
     )
 
-    def self.register(const, cmd, path)
+    def self.register(const, command_name = nil)
+      filename = CLI::Kit::Util.snake_case(const)
+      path = File.join('yeah/commands', filename)
       autoload(const, path)
-      Registry.add(->() { const_get(const) }, cmd)
+      command_name ||= CLI::Kit::Util.dash_case(const)
+      Registry.add(->() { const_get(const) }, command_name)
     end
 
-    register :Goto,    'goto',    'yeah/commands/goto'
-    register :Help,    'help',    'yeah/commands/help'
+    register :Goto
+    register :Help
   end
 end
