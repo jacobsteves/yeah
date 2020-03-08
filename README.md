@@ -12,7 +12,7 @@ The following commands are currently supported:
 
 ## Installation
 1. Clone the repo
-2. In your shell config (ie, `.bash_profile`, `.bashrc`, `.zshrc`, etc), set:
+2. We have to source our [yeah.sh](yeah.sh) file. So, in your shell config (ie, `.bash_profile`, `.bashrc`, `.zshrc`, etc) set:
 
 ```bash
 if [[ -f /your/path/to/yeah/yeah.sh ]]
@@ -27,6 +27,8 @@ fi
 ### Help
 Easily get help for any available Yeah command.
 - Usage: `yeah help some_command`
+- Note that if there is a project context (ie, a `yeah.yml` file), then
+  you will be able to use this help for the specified custom commands as well.
 
 ### Goto
 Change directories to a location indicated by a keyword.
@@ -110,3 +112,7 @@ commands:
     run:
       test: echo 'This is not allowed'
 ```
+
+## Libraries
+Yeah uses [CLI-UI](https://github.com/shopify/cli-ui) and [CLI-Kit](https://github.com/shopify/cli-kit) as the CLI
+framework.
