@@ -1,6 +1,6 @@
 #!/usr/bin/ruby --disable-gems
 
-module Env
+module Config
   ROOT = File.expand_path('../..', __FILE__)
 
   class << self
@@ -35,4 +35,4 @@ module Env
   end
 end
 
-Env.call(*ARGV) if $PROGRAM_NAME == __FILE__
+Config.call(*ARGV) if $PROGRAM_NAME == __FILE__

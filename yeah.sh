@@ -13,6 +13,7 @@
 __shell="$(\ps -p $$ | \awk 'NR > 1 { sub(/^-/, "", $4); print $4 }')"
 __shellname="$(basename "${__shell}")"
 
+# Set source_dir based on the user's current shell
 case "${__shellname}" in
   zsh)  __yeah_source_dir="$(\dirname "$0:A")" ;;
   bash) __yeah_source_dir="$(builtin cd "$(\dirname "${BASH_SOURCE[0]}")" && \pwd)" ;;
@@ -22,8 +23,8 @@ case "${__shellname}" in
     ;;
 esac
 
-#### Handlers for bin/env environment manipulation
-#### See bin/env for documentation.
+## Handlers for bin/config environment manipulation
+## See bin/config for documentation.
 yeah__setenv() { export "$1=$2"; }
 yeah__prepend_path() {
   PATH="$(
@@ -38,17 +39,16 @@ yeah__prepend_path() {
 
 while read -r line; do
   eval "${line}"
-done < <("${__yeah_source_dir}/bin/env" env "${__shellname}")
+done < <("${__yeah_source_dir}/bin/config" env "${__shellname}")
 
 unset -f yeah__setenv
 unset -f yeah__prepend_path
 
-## End changing environment variables
+## End environment manipulation
 
 __mtime_of_yeah_script="$(\date -r "${__yeah_source_dir}/yeah.sh" +%s)"
 
 yeah() {
-  # reload __yeah__ function
   local current_mtime
   current_mtime="$(\date -r "${__yeah_source_dir}/yeah.sh" +%s)"
 
@@ -77,7 +77,7 @@ __yeah__() {
 
   exec 9>"${tmpfile}" # Open the tempfile for writing on FD 9.
   exec 8<"${tmpfile}" # Open the tempfile for reading on FD 8.
-  \rm -f "${tmpfile}" # Unlink the tempfile. (we've already opened it).
+  \rm -f "${tmpfile}" # Unlink the tempfile as we've already opened it.
 
   local return_from_yeah
   local with_gems
@@ -130,5 +130,3 @@ __yeah__() {
 
   \return ${return_from_yeah}
 }
-
-# . "${__yeah_source_dir}/sh/hooks/hooks.${__shellname}"
