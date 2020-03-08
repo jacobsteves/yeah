@@ -45,13 +45,15 @@ module Yeah
         if store.exists?(key)
           path = store.get(key)
           return Yeah::Kernel.cd(path) if File.exist?(path)
-          Output.error("No such file or directory: #{path}.")
+          Output.abort("No such file or directory: #{path}.")
         else
-          Output.error("Command: #{key} hasn't been set yet.")
+          Output.abort("Command: #{key} hasn't been set yet.")
         end
       end
 
       def clear
+        Output.abort(message: 'No active keywords to be deleted.') if store.empty?
+
         ans = CLI::UI.ask('Delete all stored goto data?', options: %w(yes no))
         return Output.print('Canceled.') if ans == 'no'
 
@@ -75,9 +77,13 @@ module Yeah
       end
 
       def delete(key)
-        value = store.get(key)
-        store.delete(key)
-        Output.print("Key {{cyan:#{key}}} with value {{cyan:#{value}}} was deleted.")
+        if store.exists?(key)
+          value = store.get(key)
+          store.delete(key)
+          Output.print("Key {{cyan:#{key}}} with value {{cyan:#{value}}} was deleted.")
+        else
+          Output.abort(message: "Key {{cyan:#{key}}} has not been set.")
+        end
       end
 
       def list

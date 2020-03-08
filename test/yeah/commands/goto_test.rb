@@ -16,29 +16,29 @@ describe Yeah::Commands::Goto do
     cmd.any_instance.stubs(:store).returns(store)
   end
 
-  describe ".call" do
+  describe '.call' do
     subject do
       cmd.call(args, 'goto')
     end
 
-    describe "when list flag is set" do
+    describe 'when list flag is set' do
       let(:args) { ['name', '--list']}
 
-      it "should display the list immediately" do
+      it 'should display the list immediately' do
         cmd.any_instance.expects(:list).once
         capture_io { subject }
       end
 
-      describe "when data is empty" do
-        it "should display help" do
+      describe 'when data is empty' do
+        it 'should display help' do
           cmd.expects(:help).returns('').once
           io = capture_io { subject }
           output = io.join
-          assert_match("No locations saved yet.", output)
+          assert_match('No locations saved yet.', output)
         end
       end
 
-      describe "when data has been stored" do
+      describe 'when data has been stored' do
         let(:data) {
           {
             "some_key": "/some/route",
@@ -46,7 +46,7 @@ describe Yeah::Commands::Goto do
           }
         }
 
-        it "should display the data" do
+        it 'should display the data' do
           store.set(data)
           io = capture_io { subject }
           output = io.join
@@ -56,52 +56,69 @@ describe Yeah::Commands::Goto do
       end
     end
 
-    describe "when clear flag is set" do
+    describe 'when clear flag is set' do
       let(:args) { ['name', '--clear']}
 
-      describe "when user continues on prompt 1" do
-        describe "when user continues on prompt 2" do
-          it 'should cancel' do
-            CLI::UI.stubs(:ask).returns('yes').then.returns('I promise, clear all data')
-            store.expects(:clear).once
+      describe 'when store is empty' do
+        it 'should abort' do
+          store.stubs(:empty?).returns(true)
+          assert_raises(Yeah::AbortSilent) do
             capture_io do
-              CLI::UI::StdoutRouter.ensure_activated
               subject
             end
           end
         end
-        describe "when user cancels on prompt 2" do
+      end
+
+      describe 'when store is not empty' do
+        before do
+          store.stubs(:empty?).returns(false)
+        end
+
+        describe 'when user continues on prompt 1' do
+          describe 'when user continues on prompt 2' do
+            it 'should cancel' do
+              CLI::UI.stubs(:ask).returns('yes').then.returns('I promise, clear all data')
+              store.expects(:clear).once
+              capture_io do
+                CLI::UI::StdoutRouter.ensure_activated
+                subject
+              end
+            end
+          end
+          describe 'when user cancels on prompt 2' do
+            it 'should cancel' do
+              CLI::UI.stubs(:ask).returns('no').then.returns('cancel')
+              store.expects(:clear).never
+              capture_io { subject }
+            end
+          end
+        end
+
+        describe 'when user cancels on prompt 1' do
           it 'should cancel' do
-            CLI::UI.stubs(:ask).returns('no').then.returns('cancel')
+            CLI::UI.stubs(:ask).returns('no').once
             store.expects(:clear).never
             capture_io { subject }
           end
         end
       end
-
-      describe "when user cancels on prompt 1" do
-        it 'should cancel' do
-          CLI::UI.stubs(:ask).returns('no').once
-          store.expects(:clear).never
-          capture_io { subject }
-        end
-      end
     end
 
-    describe "when set flag is set" do
-      describe "when a value is given" do
+    describe 'when set flag is set' do
+      describe 'when a value is given' do
         let(:args) { ['name', '--set', 'value']}
 
-        it "should save the value" do
+        it 'should save the value' do
           store.expects(:set).with(name: 'value')
           capture_io { subject }
         end
       end
 
-      describe "when a value is not given" do
+      describe 'when a value is not given' do
         let(:args) { ['name', '--set']}
 
-        it "should display argument error" do
+        it 'should display argument error' do
           assert_raises(Yeah::AbortSilent) do
             io = capture_io { subject }
             assert_match('Missing argument.', io.join)
@@ -110,20 +127,32 @@ describe Yeah::Commands::Goto do
       end
     end
 
-    describe "when delete flag is set" do
-      describe "when a value is given" do
+    describe 'when delete flag is set' do
+      describe 'when a value is given' do
         let(:args) { ['name', '--delete']}
 
-        it "should delete" do
-          store.expects(:delete).with(:name)
-          capture_io { subject }
+        describe 'when value exists' do
+          before { store.stubs(:exists?).returns(true) }
+          it "should delete" do
+            store.expects(:delete).with(:name)
+            capture_io { subject }
+          end
+        end
+
+        describe 'when value does not exist' do
+          before { store.stubs(:exists?).returns(false) }
+          it "should abort" do
+            assert_raises(Yeah::AbortSilent) do
+              capture_io { subject }
+            end
+          end
         end
       end
 
-      describe "when a value is not given" do
+      describe 'when a value is not given' do
         let(:args) { ['--delete']}
 
-        it "should display argument error" do
+        it 'should display argument error' do
           assert_raises(Yeah::AbortSilent) do
             io = capture_io { subject }
             assert_match('Missing argument.', io.join)
