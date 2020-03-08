@@ -20,5 +20,11 @@ module Yeah
     def self.newline(out: $stdout)
       out.puts "\n"
     end
+
+    def self.abort(message: nil)
+      error(message, newline: block_given?) if message
+      yield if block_given?
+      raise AbortSilent
+    end
   end
 end

@@ -59,7 +59,7 @@ describe Yeah::Project do
 
     it 'should raise error when yaml is not a hash' do
       project_instance.stubs(:load_yaml_file).returns('')
-      assert_raises(Yeah::Abort) { project_instance.config }
+      assert_raises(Yeah::ProjectError) { project_instance.config }
     end
   end
 
@@ -90,11 +90,12 @@ describe Yeah::Project do
       assert_equal(dir, Yeah::Project.at("#{dir}/#{path}").directory)
     end
 
-    it 'should raise if yeah.yml file is not found here' do
+    it 'should return an EmptyProject if yeah.yml file is not found here' do
       dir = File.realpath('./')
       path = 'a/b/c/d'
       FileUtils.mkdir_p("#{dir}/#{path}")
-      assert_raises(Yeah::Abort) { Yeah::Project.at("#{dir}/#{path}").directory }
+      Yeah::Project.any_instance.expects(:load_yaml_file).never
+      assert_empty(Yeah::Project.at("#{dir}/#{path}").config)
     end
 
     it 'should cache results' do
@@ -105,8 +106,9 @@ describe Yeah::Project do
       assert(Yeah::Project.at(path).directory)
     end
 
-    it 'should raise if directory does not exist' do
-      assert_raises(Yeah::Abort) { Yeah::Project.at(nil) }
+    it 'should return an EmptyProject' do
+      Yeah::Project.any_instance.expects(:load_yaml_file).never
+      assert_empty(Yeah::Project.at(nil).config)
     end
   end
 end

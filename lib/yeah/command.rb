@@ -13,8 +13,6 @@ module Yeah
       cmd.abort_with_help(args, command_name, message: "Missing argument.")
     rescue OptionParser::InvalidOption
       cmd.abort_with_help(args, command_name, message: "Invalid option.")
-    rescue ConfigurationError => e
-      cmd.abort(message: e.message)
     end
 
     def self.options(&block)
@@ -44,15 +42,9 @@ module Yeah
     end
 
     def abort_with_help(args, command_name, message: nil)
-      abort(message: message) do
+      Output.abort(message: message) do
         call_help(args, command_name)
       end
-    end
-
-    def abort(message: nil)
-      Output.error(message, newline: block_given?) if message
-      yield if block_given?
-      raise AbortSilent
     end
 
     def has_subcommands?

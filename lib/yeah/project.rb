@@ -7,12 +7,22 @@ module Yeah
 
       def at(dir)
         proj_dir = directory(dir)
-        raise Yeah::Abort, "A Yeah project does not exist here. Create a yeah.yml file." unless proj_dir
-        @at ||= Hash.new { |h, k| h[k] = new(directory: k) }
+        @at ||= Hash.new { |h, k| h[k] = create_instance(directory: k) }
         @at[proj_dir]
       end
 
       private
+
+      class EmptyProject < Project
+        def config
+          {}
+        end
+      end
+
+      def create_instance(directory:, **args)
+        klass = directory ? self : EmptyProject
+        klass.new(directory: directory, **args)
+      end
 
       def directory(dir)
         return nil if dir.nil?
@@ -39,7 +49,7 @@ module Yeah
     def config
       @config ||= begin
         config = load_yaml_file('yeah.yml')
-        raise Yeah::Abort, "yeah.yml is not formatted properly." unless config.is_a?(Hash)
+        raise ProjectError, 'yeah.yml is not formatted properly.' unless config.is_a?(Hash)
         config
       end
     end
@@ -56,7 +66,7 @@ module Yeah
       begin
         YAML.load_file(f)
       rescue Psych::SyntaxError => e
-        raise Yeah::Abort, "#{relative_path} could not be read: #{e.message}"
+        raise ProjectError, "#{relative_path} could not be read: #{e.message}"
       end
     end
   end

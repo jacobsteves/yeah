@@ -18,6 +18,7 @@ module Yeah
   GenericAbort = CLI::Kit::GenericAbort
 
   ConfigurationError = Class.new(Exception)
+  ProjectError       = Class.new(Exception)
 
   autoload(:Command,    'yeah/command')
   autoload(:Commands,   'yeah/commands')
