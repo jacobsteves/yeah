@@ -45,9 +45,9 @@ module Yeah
         if store.exists?(key)
           path = store.get(key)
           return Yeah::Kernel.cd(path) if File.exist?(path)
-          Output.abort("No such file or directory: #{path}.")
+          Output.abort(message: "No such file or directory: #{path}.")
         else
-          Output.abort("Command: #{key} hasn't been set yet.")
+          Output.abort(message: "Command: #{key} hasn't been set yet.")
         end
       end
 

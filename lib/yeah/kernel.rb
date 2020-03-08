@@ -42,7 +42,7 @@ module Yeah
         rescue Errno::EBADF, IOError
           finalizers = []
           commands.each { |cmd| finalizers << "{{command:#{cmd}" }
-          Output.abort('Not running with shell integration. Run:', *finalizers)
+          Output.abort(message: "Not running with shell integration. Run: #{finalizers.join(', ')}")
         ensure
           clear
         end

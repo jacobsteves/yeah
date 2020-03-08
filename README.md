@@ -24,6 +24,10 @@ fi
 
 ## Commands
 
+### Help
+Easily get help for any available Yeah command.
+- Usage: `yeah help some_command`
+
 ### Goto
 Change directories to a location indicated by a keyword.
 - Usage: `yeah goto some_keyword [--set=</your/directory>] [--delete] [--clear] [--list]`
