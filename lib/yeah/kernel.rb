@@ -57,7 +57,6 @@ module Yeah
       def finalizer_pipe
         IO.new(finalizer_fd)
       rescue ArgumentError => e
-        # Looks like finalizer_fd is in use, try to find it
         ObjectSpace.each_object(IO) do |io|
           next if io.closed? || io.fileno != finalizer_fd
           raise CLI::Kit::Bug, "File descriptor #{io.fileno}, of type #{io.stat.ftype}, is not available."

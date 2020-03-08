@@ -1,0 +1,38 @@
+#!/usr/bin/ruby --disable-gems
+
+module Env
+  ROOT = File.expand_path('../..', __FILE__)
+
+  class << self
+    def call(*argv)
+      case argv.shift
+      when 'env'
+        usage_and_die unless (shellname = argv.shift)
+        env(shellname)
+      else
+        usage_and_die
+      end
+    end
+
+    private
+
+    def env(_shellname)
+      setenv('USING_YEAH', '1')
+      prepend_path("#{ROOT}/bin/user")
+    end
+
+    def setenv(k, v)
+      puts %(yeah__setenv "#{k}" "#{v}")
+    end
+
+    def prepend_path(path)
+      puts %(yeah__prepend_path "#{path}")
+    end
+
+    def usage_and_die
+      abort("usage: #{$PROGRAM_NAME} env <shellname>")
+    end
+  end
+end
+
+Env.call(*ARGV) if $PROGRAM_NAME == __FILE__

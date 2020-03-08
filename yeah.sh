@@ -19,12 +19,9 @@ case "${__shellname}" in
     ;;
 esac
 
-#### Handlers for bin/shell-support environment manipulation
-#### See bin/shell-support for documentation.
-yeah__source() { source "$1"; }
+#### Handlers for bin/env environment manipulation
+#### See bin/env for documentation.
 yeah__setenv() { export "$1=$2"; }
-yeah__append_path() { export "PATH=${PATH}:$1"; }
-yeah__lazyload() { type "$1" >/dev/null 2>&1 || eval "$1() { source $2 ; $1 \"\$@\"; }"; }
 yeah__prepend_path() {
   PATH="$(
     /usr/bin/awk -v RS=: -v ORS= -v "prepend=$1" '
@@ -38,13 +35,10 @@ yeah__prepend_path() {
 
 while read -r line; do
   eval "${line}"
-done < <("${__yeah_source_dir}/bin/shell-support" env "${__shellname}")
+done < <("${__yeah_source_dir}/bin/env" env "${__shellname}")
 
-unset -f yeah__source
 unset -f yeah__setenv
-unset -f yeah__append_path
 unset -f yeah__prepend_path
-unset -f yeah__lazyload
 
 ## End changing environment variables
 
