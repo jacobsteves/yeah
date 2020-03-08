@@ -2,6 +2,14 @@
   <img src="https://i.imgur.com/ljd1HY3.png" alt="Yeah Logo" height="80px" />
 </p>
 
+## About
+Yeah is a CLI designed to improve the workflow of a shell. Pull requests + more commands are welcome!
+
+The following commands are currently supported:
+
+- [Goto](https://github.com/jacobsteves/yeah#goto): Save keywords as directory shortcuts and change to thier directory
+- [Custom Commands](https://github.com/jacobsteves/yeah#custom-commands): Execute custom commands written within a `yeah.yml` file
+
 ## Installation
 1. Clone the repo
 2. In your shell config (ie, `.bash_profile`, `.bashrc`, `.zshrc`, etc), set:
@@ -17,14 +25,14 @@ fi
 ## Commands
 
 ### Goto
-- Change directories to a location indicated by a keyword.
-- Usage: `yeah goto some_keyword [--set=<your directory>] [--delete] [--clear] [--list]`
+Change directories to a location indicated by a keyword.
+- Usage: `yeah goto some_keyword [--set=</your/directory>] [--delete] [--clear] [--list]`
 - Example:
 ```
 # Set new keyword: test
 yeah goto test --set=/my/path
 
-# Go to keyword: test
+# Go to keyword: test => cd /my/path
 yeah goto test
 
 # Delete keyword: test
@@ -42,19 +50,8 @@ This is designed so that you can save different commands and execute them easily
 You can create a `yeah.yml` file and configure it. Under the `commands` scope, you can declare commands.
 These commands can be run the same way as a regular command. For example, a command named `custom_test` can
 be run by invoking `yeah custom_test`.
-
-Take the following configuration, for example:
-
-```yaml
-# yeah.yml
-
-commands:
-  hello:
-    desc: prints Hello World!
-    run: echo "Hello world!"
-```
-
-Note that passing in arguments to custom scripts forwards the arguments to command.
+- Usage: `yeah some_custom_command [--args] [--to_be_forwarded] [--to_specified_command]`
+- Example:
 
 ```yaml
 # yeah.yml
@@ -66,9 +63,9 @@ commands:
 ```
 
 ```
-$ yeah install
+$ yeah install # runs: npm install
 npm output...
-$ yeah install --silent # silent flag gets passed to npm install
+$ yeah install --silent # runs: npm install --silent
 ```
 
 #### Example Configuration
