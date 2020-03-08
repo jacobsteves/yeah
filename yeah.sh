@@ -1,10 +1,13 @@
 #!/bin/sh
+
+# This shell script was inspired by https://github.com/Shopify/shopify-app-cli and thus
+# falls under their MIT copyright license. A copy of the MIT license is available in the
+# root directory of this project.
+
 # shellcheck disable=1001,1012,2039,1090
 # 1001,1012 stop complaints about '\awk' syntax to bypass aliases.
 # 2039 stops complaints about array references not being POSIX.
 # 1090 stops complaints about sourcing non-constant paths.
-
-# This shell script was inspired by https://github.com/Shopify/shopify-app-cli
 
 # This must be outside of the function context for $0 to work properly
 __shell="$(\ps -p $$ | \awk 'NR > 1 { sub(/^-/, "", $4); print $4 }')"
