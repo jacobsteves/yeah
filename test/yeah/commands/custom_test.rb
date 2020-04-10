@@ -90,4 +90,22 @@ describe Yeah::Commands::Custom do
       end
     end
   end
+
+  describe 'execute' do
+    let(:command) { 'ls' }
+    let(:args) { [] }
+    subject do
+      cmd_instance.send(:execute, command, args)
+    end
+
+    it 'aborts if system fails' do
+      cmd_instance.stubs(:system).returns(false)
+      assert_raises (Yeah::Abort) { subject }
+    end
+
+    it 'continues if system succeeds' do
+      cmd_instance.stubs(:system).returns(true)
+      subject
+    end
+  end
 end

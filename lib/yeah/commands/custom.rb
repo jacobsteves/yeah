@@ -45,7 +45,7 @@ module Yeah
 
       def execute(cmd, args = [])
         raise_config_error unless cmd.is_a?(String)
-        exec(cmd, *args)
+        raise Yeah::Abort, "{{x}} Task {{command:cmd}} Failed." unless system(cmd, *args)
       end
     end
   end
