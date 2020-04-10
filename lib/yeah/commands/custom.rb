@@ -6,6 +6,7 @@ module Yeah
       def call(args, command_name)
         self.command_name = command_name
         cmd = command(command_name)
+        raise_config_error unless cmd
         run(cmd, args)
       end
 
@@ -23,18 +24,17 @@ module Yeah
 
       def command(name)
         cmd = commands[name]
-        raise_config_error unless valid_command(cmd)
-        cmd
-      end
-
-      def raise_config_error
-        raise Yeah::ConfigurationError,
-              "The command {{command:#{command_name}}} within yeah.yml is not configured properly."
+        valid_command(cmd) ? cmd : nil
       end
 
       def valid_command(cmd)
         return false unless cmd&.dig('run')
         cmd['run'].is_a?(Array) || cmd['run'].is_a?(String)
+      end
+
+      def raise_config_error
+        raise Yeah::ConfigurationError,
+              "The command {{command:#{command_name}}} within yeah.yml is not configured properly."
       end
 
       def run(definition, args = [])
@@ -45,6 +45,9 @@ module Yeah
 
       def execute(cmd, args = [])
         raise_config_error unless cmd.is_a?(String)
+        yeah_command = command(cmd)
+
+        return run(yeah_command, args) if yeah_command
         raise Yeah::Abort, "{{x}} Task {{command:#{cmd}}} Failed." unless system(cmd, *args)
       end
     end

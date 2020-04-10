@@ -101,7 +101,12 @@ commands:
   rubocop:
     desc: Runs the rubocop linter
     run: rubocop
-    
+
+  # yeah calls_another_command
+  calls_another_command:
+    desc: This command calls the hello command specific above
+    run: hello
+
   # yeah invalid  
   invalid:
     desc: Since this command has no run key, it should fail on execution

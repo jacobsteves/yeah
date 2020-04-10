@@ -107,5 +107,12 @@ describe Yeah::Commands::Custom do
       cmd_instance.stubs(:system).returns(true)
       subject
     end
+
+    it 'should call another yeah command if specified' do
+      command_def = { run: [] }
+      cmd_instance.stubs(:command).with(command).returns(command_def)
+      cmd_instance.expects(:run).with(command_def, args)
+      subject
+    end
   end
 end
