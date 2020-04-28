@@ -48,7 +48,7 @@ module Yeah
         yeah_command = command(cmd)
 
         return run(yeah_command, args) if yeah_command
-        raise Yeah::Abort, "{{x}} Task {{command:#{cmd}}} Failed." unless system(cmd, *args)
+        raise Yeah::Abort, "{{x}} Task {{command:#{cmd}}} Failed." unless system(*cmd.split(' '), *args)
       end
     end
   end

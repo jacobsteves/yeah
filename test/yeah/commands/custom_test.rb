@@ -114,5 +114,15 @@ describe Yeah::Commands::Custom do
       cmd_instance.expects(:run).with(command_def, args)
       subject
     end
+
+    describe 'when cmd is specified with arguments or flags' do
+      let(:command) { 'command -f -name test' }
+      let(:args) { %w(-a -l) }
+
+      it 'should split cmd flags when executing' do
+        cmd_instance.expects(:system).with('command', '-f', '-name', 'test', '-a', '-l').returns(true)
+        subject
+      end
+    end
   end
 end
