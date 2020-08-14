@@ -22,7 +22,7 @@ describe Yeah::Commands::Goto do
     end
 
     describe 'when list flag is set' do
-      let(:args) { ['name', '--list']}
+      let(:args) { ['name', '--list'] }
 
       it 'should display the list immediately' do
         cmd.any_instance.expects(:list).once
@@ -39,12 +39,12 @@ describe Yeah::Commands::Goto do
       end
 
       describe 'when data has been stored' do
-        let(:data) {
+        let(:data) do
           {
             "some_key": "/some/route",
-            "some_key2": "/another/route"
+            "some_key2": "/another/route",
           }
-        }
+        end
 
         it 'should display the data' do
           store.set(data)
@@ -57,7 +57,7 @@ describe Yeah::Commands::Goto do
     end
 
     describe 'when clear flag is set' do
-      let(:args) { ['name', '--clear']}
+      let(:args) { ['name', '--clear'] }
 
       describe 'when store is empty' do
         it 'should abort' do
@@ -107,7 +107,7 @@ describe Yeah::Commands::Goto do
 
     describe 'when set flag is set' do
       describe 'when a value is given' do
-        let(:args) { ['name', '--set', 'value']}
+        let(:args) { ['name', '--set', 'value'] }
 
         it 'should save the value' do
           store.expects(:set).with(name: 'value')
@@ -116,7 +116,7 @@ describe Yeah::Commands::Goto do
       end
 
       describe 'when a value is not given' do
-        let(:args) { ['name', '--set']}
+        let(:args) { ['name', '--set'] }
 
         it 'should display argument error' do
           assert_raises(Yeah::AbortSilent) do
@@ -129,7 +129,7 @@ describe Yeah::Commands::Goto do
 
     describe 'when delete flag is set' do
       describe 'when a value is given' do
-        let(:args) { ['name', '--delete']}
+        let(:args) { ['name', '--delete'] }
 
         describe 'when value exists' do
           before { store.stubs(:exists?).returns(true) }
@@ -150,7 +150,7 @@ describe Yeah::Commands::Goto do
       end
 
       describe 'when a value is not given' do
-        let(:args) { ['--delete']}
+        let(:args) { ['--delete'] }
 
         it 'should display argument error' do
           assert_raises(Yeah::AbortSilent) do

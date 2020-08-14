@@ -28,3 +28,5 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bin/test
+    - name: Run linter
+      run: bundle exec rubocop .

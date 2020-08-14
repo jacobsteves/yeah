@@ -17,8 +17,8 @@ module Yeah
   BugSilent    = CLI::Kit::BugSilent
   GenericAbort = CLI::Kit::GenericAbort
 
-  ConfigurationError = Class.new(Exception)
-  ProjectError       = Class.new(Exception)
+  ConfigurationError = Class.new(RuntimeError)
+  ProjectError       = Class.new(RuntimeError)
 
   autoload(:Command,    'yeah/command')
   autoload(:Commands,   'yeah/commands')
@@ -29,7 +29,7 @@ module Yeah
   autoload(:Project,    'yeah/project')
   autoload(:Store,      'yeah/store')
 
-  autocall(:Config)  { CLI::Kit::Config.new(tool_name: TOOL_NAME) }
+  autocall(:Config) { CLI::Kit::Config.new(tool_name: TOOL_NAME) }
 
   autocall(:Executor) { CLI::Kit::Executor.new(log_file: LOG_FILE) }
   autocall(:Resolver) do

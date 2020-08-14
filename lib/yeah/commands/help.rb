@@ -42,9 +42,7 @@ module Yeah
 
       def print_base_command(name, klass)
         Output.print(command_usage(name))
-        if help = klass.help
-          Output.print(help)
-        end
+        Output.print(klass.help) if klass.help
       end
 
       def print_project_commands

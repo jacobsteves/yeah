@@ -11,3 +11,4 @@ yeah.yml
 
 # Misc
 .byebug_history
+.rubocop-*
