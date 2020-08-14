@@ -74,7 +74,7 @@ describe Yeah::Project do
     describe 'when there are custom commands in the config' do
       it 'should pull the keys from the config' do
         project_instance.stubs(:config).returns({
-          'commands' => { a: 'a', b: 'b' }
+          'commands' => { a: 'a', b: 'b' },
         })
         assert_equal([:a, :b], project_instance.custom_command_names)
       end

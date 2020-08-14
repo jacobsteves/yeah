@@ -51,7 +51,7 @@ describe Yeah::Commands::Custom do
         {
           'run' => [
             'a', 'b'
-          ]
+          ],
         }
       end
       it 'should execute them all' do
@@ -64,7 +64,7 @@ describe Yeah::Commands::Custom do
     describe 'when tasks to run is a string' do
       let(:definition) do
         {
-          'run' => 'a'
+          'run' => 'a',
         }
       end
       it 'should execute it' do
@@ -77,7 +77,7 @@ describe Yeah::Commands::Custom do
       let(:args) { ['-a', '-l'] }
       let(:definition) do
         {
-          'run' => 'a'
+          'run' => 'a',
         }
       end
       subject do
@@ -100,7 +100,7 @@ describe Yeah::Commands::Custom do
 
     it 'aborts if system fails' do
       cmd_instance.stubs(:system).returns(false)
-      assert_raises (Yeah::Abort) { subject }
+      assert_raises(Yeah::Abort) { subject }
     end
 
     it 'continues if system succeeds' do
