@@ -119,8 +119,8 @@ describe Yeah::Commands::Custom do
       let(:command) { 'command -f -name test' }
       let(:args) { %w(-a -l) }
 
-      it 'should split cmd flags when executing' do
-        cmd_instance.expects(:system).with('command', '-f', '-name', 'test', '-a', '-l').returns(true)
+      it 'should combine arguments into string when executing' do
+        cmd_instance.expects(:system).with('command -f -name test -a -l').returns(true)
         subject
       end
     end
